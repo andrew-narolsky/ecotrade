@@ -14,6 +14,17 @@ class CategorySeeder extends Seeder
     {
         $categories = OldCategory::get();
 
+//        // Get categories
+//        $ids = OldCategory::pluck('id')->all();
+//        $categories = OldCategory::get()->keyBy('id')->toarray();
+//        $array = [];
+//        foreach ($categories as $key => $category) {
+//            if (in_array($category['parent_id'], $ids) && $category['parent_id']) {
+//                $array[$key] = $category;
+//            }
+//        }
+
+        // Save at et1_category
         foreach ($categories as $category) {
             DB::table('et1_category')->insert([
                 'category_id' => $category->id,
@@ -28,6 +39,7 @@ class CategorySeeder extends Seeder
             ]);
         }
 
+        // Save at et1_category_description
         foreach ($categories as $category) {
             DB::table('et1_category_description')->insert([
                 'category_id' => $category->id,
@@ -38,6 +50,14 @@ class CategorySeeder extends Seeder
                 'meta_h1' => strip_tags($category->description_html) ?? NULL,
                 'meta_description' => $category->description ?? NULL,
                 'meta_keyword' => $category->keywords ?? NULL,
+            ]);
+        }
+
+        // Save at et1_url_alias
+        foreach ($categories as $category) {
+            DB::table('et1_url_alias')->insert([
+                'query' => 'category_id=' . $category->id,
+                'keyword' => $category->key,
             ]);
         }
     }
