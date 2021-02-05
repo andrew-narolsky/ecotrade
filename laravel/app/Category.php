@@ -8,6 +8,11 @@ class Category extends Model
 {
     protected $table = 'et1_category';
 
+    public function products()
+    {
+        return $this->belongsToMany('App\Product', '_product_structure', 'product_id', 'category_id');
+    }
+
     protected $fillable = [
         'category_id',
         'image',
@@ -19,4 +24,6 @@ class Category extends Model
         'date_added',
         'date_modified'
     ];
+
+    // SELECT product_id, COUNT(*) c FROM `_product_structure` GROUP BY product_id HAVING c > 1
 }
