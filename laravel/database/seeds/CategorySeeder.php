@@ -1,6 +1,9 @@
 <?php
 
-use App\OldCategory;
+//use App\OldCategory;
+//use App\OldCategoryOne;
+//use App\OldCategoryTwo;
+use App\OldCategoryThree;
 use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
@@ -12,28 +15,47 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $categories = OldCategory::get();
+        $categories = OldCategoryThree::get();
 
 //        // Get categories
-//        $ids = OldCategory::pluck('id')->all();
-//        $categories = OldCategory::get()->keyBy('id')->toarray();
+//        $ids = OldCategoryTwo::pluck('id')->all();
+//        $categories = OldCategoryTwo::get()->keyBy('id')->toarray();
 //        $array = [];
 //        foreach ($categories as $key => $category) {
-//            if (in_array($category['parent_id'], $ids) && $category['parent_id']) {
+//            if (in_array($category['parent_id'], $ids) || !$category['parent_id']) {
 //                $array[$key] = $category;
 //            }
+//        }
+//
+//        // Save at et1_category
+//        foreach ($array as $category) {
+//            DB::table('_product_categories_3')->insert([
+//                'id' => $category['id'],
+//                'parent_id' => $category['parent_id'],
+//                'key' => $category['key'],
+//                'name' => $category['name'],
+//                'description_html' => strip_tags($category['description_html']),
+//                'seotext_html' => $category['seotext_html'],
+//                'title' => $category['title'],
+//                'keywords' => $category['keywords'],
+//                'description' => $category['description'],
+//                'file' => $category['file'],
+//                'position' => $category['position'],
+//                'disabled' => $category['disabled'],
+//                'currency'  => $category['currency']
+//            ]);
 //        }
 
         // Save at et1_category
         foreach ($categories as $category) {
             DB::table('et1_category')->insert([
                 'category_id' => $category->id,
-                'image' => 'catalog/categories' . $category->file ?? '',
+                'image' => 'catalog/categories/' . $category->file ?? '',
                 'parent_id' => $category->parent_id,
-                'top' => 0,
+                'top' => 1,
                 'column' => 0,
                 'sort_order' => 0,
-                'status' => 1,
+                'status' => !$category->disabled,
                 'date_added' => date("Y-m-d H:i:s"),
                 'date_modified' => date("Y-m-d H:i:s"),
             ]);
@@ -58,6 +80,32 @@ class CategorySeeder extends Seeder
             DB::table('et1_url_alias')->insert([
                 'query' => 'category_id=' . $category->id,
                 'keyword' => $category->key,
+            ]);
+        }
+
+        // Save at et1_category_to_layout
+        foreach ($categories as $category) {
+            DB::table('et1_category_to_layout')->insert([
+                'category_id' => $category->id,
+                'store_id' => 0,
+                'layout_id' => 0
+            ]);
+        }
+
+        // Save at et1_category_to_store
+        foreach ($categories as $category) {
+            DB::table('et1_category_to_store')->insert([
+                'category_id' => $category->id,
+                'store_id' => 0
+            ]);
+        }
+
+        // Save at et1_category_path
+        foreach ($categories as $category) {
+            DB::table('et1_category_path')->insert([
+                'category_id' => $category->id,
+                'path_id' => $category->id,
+                'level' => 0
             ]);
         }
     }
