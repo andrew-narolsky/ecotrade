@@ -46,8 +46,9 @@ class CategorySeeder extends Seeder
 //            ]);
 //        }
 
-        // Save at et1_category
+
         foreach ($categories as $category) {
+            // Save at et1_category
             DB::table('et1_category')->insert([
                 'category_id' => $category->id,
                 'image' => 'catalog/categories/' . $category->file ?? '',
@@ -59,10 +60,8 @@ class CategorySeeder extends Seeder
                 'date_added' => date("Y-m-d H:i:s"),
                 'date_modified' => date("Y-m-d H:i:s"),
             ]);
-        }
 
-        // Save at et1_category_description
-        foreach ($categories as $category) {
+            // Save at et1_category_description
             DB::table('et1_category_description')->insert([
                 'category_id' => $category->id,
                 'language_id' => 1,
@@ -73,35 +72,27 @@ class CategorySeeder extends Seeder
                 'meta_description' => $category->description ?? NULL,
                 'meta_keyword' => $category->keywords ?? NULL,
             ]);
-        }
 
-        // Save at et1_url_alias
-        foreach ($categories as $category) {
+            // Save at et1_url_alias
             DB::table('et1_url_alias')->insert([
                 'query' => 'category_id=' . $category->id,
                 'keyword' => $category->key,
             ]);
-        }
 
-        // Save at et1_category_to_layout
-        foreach ($categories as $category) {
+            // Save at et1_category_to_layout
             DB::table('et1_category_to_layout')->insert([
                 'category_id' => $category->id,
                 'store_id' => 0,
                 'layout_id' => 0
             ]);
-        }
 
-        // Save at et1_category_to_store
-        foreach ($categories as $category) {
+            // Save at et1_category_to_store
             DB::table('et1_category_to_store')->insert([
                 'category_id' => $category->id,
                 'store_id' => 0
             ]);
-        }
 
-        // Save at et1_category_path
-        foreach ($categories as $category) {
+            // Save at et1_category_path
             DB::table('et1_category_path')->insert([
                 'category_id' => $category->id,
                 'path_id' => $category->id,
